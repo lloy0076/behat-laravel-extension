@@ -4,6 +4,7 @@ namespace Goez\BehatLaravelExtension\Context;
 
 use Exception;
 use Illuminate\Contracts\Auth\Authenticatable as UserContract;
+use Illuminate\Contracts\Events\Dispatcher;
 use Mockery;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -38,6 +39,48 @@ trait ApplicationTrait
         return $this->app;
     }
 
+
+    /**
+     * The callbacks that should be run before the application is destroyed.
+     *
+     * @var array
+     */
+    protected $beforeApplicationDestroyedCallbacks = [];
+
+    /**
+     * Clean up the testing environment before the next test.
+     *
+     * @AfterScenario
+     * @return void
+     */
+    public function tearDown()
+    {
+        if (class_exists('Mockery')) {
+            Mockery::close();
+        }
+
+        if ($this->app) {
+            foreach ($this->beforeApplicationDestroyedCallbacks as $callback) {
+                call_user_func($callback);
+            }
+
+            $this->app->flush();
+
+            $this->app = null;
+        }
+    }
+
+    /**
+     * Register a callback to be run before the application is destroyed.
+     *
+     * @param  callable $callback
+     * @return void
+     */
+    protected function beforeApplicationDestroyed(callable $callback)
+    {
+        $this->beforeApplicationDestroyedCallbacks[] = $callback;
+    }
+
     /**
      * Register an instance of an object in the container.
      *
@@ -64,7 +107,7 @@ trait ApplicationTrait
     {
         $events = is_array($events) ? $events : func_get_args();
 
-        $mock = Mockery::spy('Illuminate\Contracts\Events\Dispatcher');
+        $mock = Mockery::spy(Dispatcher::class);
 
         $mock->shouldReceive('fire')->andReturnUsing(function ($called) use (&$events) {
             foreach ($events as $key => $event) {
@@ -97,7 +140,7 @@ trait ApplicationTrait
      */
     protected function withoutEvents()
     {
-        $mock = Mockery::mock('Illuminate\Contracts\Events\Dispatcher');
+        $mock = Mockery::mock(Dispatcher::class);
 
         $mock->shouldReceive('fire');
 
