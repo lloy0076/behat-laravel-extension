@@ -3,10 +3,14 @@
     "description": "Enhance Laracasts Behat Laravel Extension",
     "type": "library",
     "require": {
-        "laracasts/behat-laravel-extension": "dev-master"
+        "laracasts/behat-laravel-extension": "~1.0",
+        "symfony/http-kernel": "~2.6",
+        "illuminate/contracts": "~5.1",
+        "phpunit/phpunit": "~4.7",
+        "mockery/mockery": "^0.9.4"
     },
     "require-dev": {
-        "phpspec/phpspec": "^2.2@dev"
+        "phpspec/phpspec": "~2.1"
     },
     "license": "MIT",
     "authors": [
@@ -15,7 +19,6 @@
             "email": "jaceju@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
             "Goez\\BehatLaravelExtension\\": "src/"
