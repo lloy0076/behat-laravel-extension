@@ -1,0 +1,24 @@
+{
+    "name": "goez/behat-laravel-extension",
+    "description": "Enhance Laracasts Behat Laravel Extension",
+    "type": "library",
+    "require": {
+        "laracasts/behat-laravel-extension": "dev-master"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "^2.2@dev"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jace Ju",
+            "email": "jaceju@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Goez\\BehatLaravelExtension\\": "src/"
+        }
+    }
+}
