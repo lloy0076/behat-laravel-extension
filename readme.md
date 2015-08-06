@@ -1,6 +1,6 @@
 ## Why?
 
-I like to develop a Laravel application by Behat way. With [Laracasts' Behat Laravel Extension](https://github.com/laracasts/Behat-Laravel-Extension), it let my dreams come true.
+I like to develop a Laravel application by Behat way. With [Laracasts' Behat Laravel Extension](https://github.com/laracasts/Behat-Laravel-Extension), it made my dreams come true.
 
 After I upgraded to Laravel 5.1, I fall in love the testing methods such as `seeInDatabase` or `be` in the new testing framework, but I can not use them in Behat context class.
 
