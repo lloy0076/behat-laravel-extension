@@ -5,17 +5,17 @@ namespace Goez\BehatLaravelExtension\Context;
 use Exception;
 use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Foundation\Application;
 use Mockery;
+use Mockery\Mock;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 trait ApplicationTrait
 {
-    use AssertionsTrait;
-
     /**
      * The Laravel application.
      *
-     * @var HttpKernelInterface
+     * @var Application
      */
     protected $app;
 
@@ -32,7 +32,7 @@ trait ApplicationTrait
     /**
      * Get the application.
      *
-     * @return mixed
+     * @return Application
      */
     public function app()
     {
@@ -53,7 +53,7 @@ trait ApplicationTrait
      * @AfterScenario
      * @return void
      */
-    public function tearDown()
+    public function shutdownApplication()
     {
         if (class_exists('Mockery')) {
             Mockery::close();
@@ -100,7 +100,7 @@ trait ApplicationTrait
      *
      * These events will be mocked, so that handlers will not actually be executed.
      *
-     * @param  array|dynamic $events
+     * @param  array|mixed $events
      * @return $this
      */
     public function expectsEvents($events)
@@ -108,6 +108,7 @@ trait ApplicationTrait
         $events = is_array($events) ? $events : func_get_args();
 
         $mock = Mockery::spy(Dispatcher::class);
+        /* @var $mock Mock */
 
         $mock->shouldReceive('fire')->andReturnUsing(function ($called) use (&$events) {
             foreach ($events as $key => $event) {
@@ -141,6 +142,7 @@ trait ApplicationTrait
     protected function withoutEvents()
     {
         $mock = Mockery::mock(Dispatcher::class);
+        /* @var $mock Mock */
 
         $mock->shouldReceive('fire');
 
@@ -154,7 +156,7 @@ trait ApplicationTrait
      *
      * These jobs will be mocked, so that handlers will not actually be executed.
      *
-     * @param  array|dynamic $jobs
+     * @param  array|mixed $jobs
      * @return $this
      */
     protected function expectsJobs($jobs)
@@ -162,6 +164,7 @@ trait ApplicationTrait
         $jobs = is_array($jobs) ? $jobs : func_get_args();
 
         $mock = Mockery::mock('Illuminate\Bus\Dispatcher[dispatch]', [$this->app]);
+        /* @var $mock Mock */
 
         foreach ($jobs as $job) {
             $mock->shouldReceive('dispatch')->atLeast()->once()
