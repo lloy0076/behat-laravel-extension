@@ -60,7 +60,18 @@ This extension is still in development. If you have any issues, please let me kn
  composer require goez/behat-laravel-extension
  ```
 
-2. Let your context class extends the `Goez\BehatLaravelExtension\Context\LaravelContext` class:
+2. Add this extension and mink extension in your `behat.yml`:
+
+ ```yaml
+ default:
+     extensions:
+         Goez\BehatLaravelExtension:
+         Behat\MinkExtension:
+             default_session: laravel
+             laravel: ~
+ ```
+
+3. Let your context class extends the `Goez\BehatLaravelExtension\Context\LaravelContext` class:
 
  ```php
  use Goez\BehatLaravelExtension\Context\LaravelContext;
